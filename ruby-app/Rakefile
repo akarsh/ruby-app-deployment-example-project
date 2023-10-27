@@ -1,0 +1,13 @@
+# frozen_string_literal: true
+
+desc 'Run the server'
+
+task :server do
+  ruby 'http_server.rb'
+end
+
+desc 'Run the test'
+
+task :test do
+  ruby 'http_server_test.rb'
+end

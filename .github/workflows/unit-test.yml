@@ -15,5 +15,9 @@ jobs:
         with:
           ruby-version: "3.2.2"
       - run: bundle install
+      - name: Start the server in the background
+        run: |
+          sudo ruby http_server.rb &
+          sleep 5
       - name: Unit test
-        run: ruby http_server_test.rb
+        run: sudo ruby http_server_test.rb
