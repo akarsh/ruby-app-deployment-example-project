@@ -123,3 +123,43 @@ Finished in 0.000867 seconds.
 ------------------------------------------------------------------------------------------------------
 2306.81 tests/s, 2306.81 assertions/s
 ```
+
+## Docker
+
+Build the docker container
+
+```
+docker build -t sakarsh/ruby-app-deployment-example-project .
+```
+
+Run docker container
+
+```
+docker run -t -d -p 80:80 -i sakarsh/ruby-app-deployment-example-project:latest
+```
+
+Build and run ruby app with Docker Compose
+
+```
+docker compose up -d
+```
+
+Stop ruby app with Docker Compose
+
+```
+docker compose down
+```
+
+## Helm
+
+Install helm chart in minikube
+
+```
+helm install ruby-chart rubyap/ --values rubyap/values.yaml
+```
+
+Delete helm chart
+
+```
+helm delete ruby-chart
+```
