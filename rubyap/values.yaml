@@ -1,0 +1,6 @@
+# Default values for rubyap
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+container:
+  name: ruby-app-deployment-example-project
+  port: 80
