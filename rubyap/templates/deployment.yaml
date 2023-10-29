@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: {{ .Values.container.name }}
+  name: {{ .Values.container.name }}-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Values.container.name }}
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: {{ .Values.container.name }}
+    spec:
+      containers:
+        - image: sakarsh/{{ .Values.container.name }}:latest
+          name: {{ .Values.container.name }}
+          ports:
+            - containerPort: {{ .Values.container.port }}
+              protocol: TCP
+          resources: {}
+          stdin: true
+          tty: true 
+      restartPolicy: Always
+status: {}

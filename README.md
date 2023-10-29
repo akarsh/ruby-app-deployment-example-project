@@ -2,6 +2,21 @@
 
 The project `ruby-app-deployment-example-project` contains a web server ruby app written in ruby.
 
+# Table of Contents
+
+- [Installation](#installation)
+- [Environment setup](#environment-setup)
+- [How is the Gemfile in the project created?](#how-is-the-gemfile-in-the-project-created)
+- [Running](#running)
+- [Development](#development)
+- [Testing](#testing)
+- [Docker](#docker)
+- [Helm](#helm)
+- [Kind](#kind)
+- [License](#license)
+- [Authors](#authors)
+- [Credits](#credits)
+
 ## Installation
 
 We assume you are using macOS for developing the projects. Below instructions are designed to work in macOS Sonoma 14.0.
@@ -163,3 +178,26 @@ Delete helm chart
 ```
 helm delete ruby-chart
 ```
+
+## Kind
+
+Create a cluster in kind with `config.yaml` file to access the Nodeport service locally
+
+```
+kind create cluster --config=config.yaml
+```
+
+Access the page locally on http://localhost/
+and healthcheck on http://localhost/healthcheck
+
+### License
+
+[LICENSE - GNU GENERAL PUBLIC LICENSE Version 3](LICENSE)
+
+## Authors
+
+[akarsh](https://github.com/akarsh)
+
+### Credits
+
+This project uses Open Source components. You can find the source code of their open source projects along with license information below. We acknowledge and are grateful to these developers for their contributions to open source.
