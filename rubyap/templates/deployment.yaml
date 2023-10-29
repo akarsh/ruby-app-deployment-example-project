@@ -16,13 +16,9 @@ spec:
   strategy: {}
   template:
     metadata:
-      annotations:
-        kompose.cmd: kompose convert -f docker-compose.yaml
-        kompose.version: 1.31.2 (HEAD)
       creationTimestamp: null
       labels:
-        io.kompose.network/{{ .Values.container.name }}-default: "true"
-        io.kompose.service: {{ .Values.container.name }}
+        app: {{ .Values.container.name }}
     spec:
       containers:
         - image: sakarsh/{{ .Values.container.name }}:latest
@@ -33,6 +29,6 @@ spec:
               protocol: TCP
           resources: {}
           stdin: true
-          tty: true
+          tty: true 
       restartPolicy: Always
 status: {}
