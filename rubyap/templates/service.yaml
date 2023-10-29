@@ -4,14 +4,13 @@ metadata:
   creationTimestamp: null
   labels:
     app: {{ .Values.container.name }}
-  name: {{ .Values.container.name }}
+  name: {{ .Values.container.name }}-service
 spec:
+  type: ClusterIP
   ports:
     - name: "{{ .Values.container.port }}"
       port: {{ .Values.container.port }}
       targetPort: {{ .Values.container.port }}
-      nodePort: 3100
-    type: loadBalancer
   selector:
     app: {{ .Values.container.name }}
 status:

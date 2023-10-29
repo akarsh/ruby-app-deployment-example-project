@@ -1,18 +1,15 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  annotations:
-    kompose.cmd: kompose convert -f docker-compose.yaml
-    kompose.version: 1.31.2 (HEAD)
   creationTimestamp: null
   labels:
-    io.kompose.service: {{ .Values.container.name }}
-  name: {{ .Values.container.name }}
+    app: {{ .Values.container.name }}
+  name: {{ .Values.container.name }}-deployment
 spec:
   replicas: 1
   selector:
     matchLabels:
-      io.kompose.service: {{ .Values.container.name }}
+      app: {{ .Values.container.name }}
   strategy: {}
   template:
     metadata:
@@ -25,7 +22,6 @@ spec:
           name: {{ .Values.container.name }}
           ports:
             - containerPort: {{ .Values.container.port }}
-              hostPort: {{ .Values.container.port }}
               protocol: TCP
           resources: {}
           stdin: true
