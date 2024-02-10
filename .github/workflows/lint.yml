@@ -1,9 +1,11 @@
 name: Lint on push
 
+run-name: Lint on ${{ inputs.build_id }}
+
 on: push
 
 jobs:
-  test:
+  lint:
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -14,6 +16,7 @@ jobs:
       - uses: ruby/setup-ruby@v1.159.0
         with:
           ruby-version: "3.2.2"
-      - run: bundle install
-      - name: Rubocop
+      - name: Run bundle install
+        run: bundle install
+      - name: Check Rubocop Styles
         run: rubocop
