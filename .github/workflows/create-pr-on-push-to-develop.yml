@@ -1,0 +1,67 @@
+name: create-pr-on-push-to-develop
+run-name: Create Pull Request from Source Branch to Main
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  create-pr:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.PAT_EXAMPLE }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Get latest commit details
+        id: commit_details
+        run: |
+          COMMIT_SHA=$(git rev-parse HEAD)
+          COMMIT_TITLE=$(git log -1 --pretty=format:'%s' $COMMIT_SHA)
+          COMMIT_MESSAGE=$(git log -1 --pretty=format:'%b' $COMMIT_SHA)
+          COMMIT_AUTHOR=$(git log -1 --pretty=format:'%an' $COMMIT_SHA)
+          echo "commit_sha=${COMMIT_SHA}" >> $GITHUB_ENV
+          echo "commit_title=${COMMIT_TITLE}" >> $GITHUB_ENV
+          echo "commit_message=${COMMIT_MESSAGE}" >> $GITHUB_ENV
+          echo "commit_author=${COMMIT_AUTHOR}" >> $GITHUB_ENV
+
+      - name: Map commit author to GitHub username
+        id: map_author
+        run: |
+          declare -A AUTHOR_MAP=( ["Akarsh Seggemu"]="akarsh" )
+          GITHUB_USERNAME=${AUTHOR_MAP["$commit_author"]}
+          echo "GITHUB_USERNAME=${GITHUB_USERNAME}" >> $GITHUB_ENV
+
+      - name: Determine labels based on commit message
+        id: determine_labels
+        run: |
+          declare -A LABEL_KEYWORDS
+          LABEL_KEYWORDS["bug"]="bug"
+          LABEL_KEYWORDS["doc"]="documentation"
+          LABEL_KEYWORDS["enhancement"]="enhancement"
+          LABEL_KEYWORDS["first issue"]="good first issue"
+          LABEL_KEYWORDS["help"]="help wanted"
+          LABEL_KEYWORDS["invalid"]="invalid"
+          LABEL_KEYWORDS["question"]="question"
+          LABEL_KEYWORDS["wontfix"]="wontfix"
+
+          COMMIT_TITLE="${{ env.commit_title }}"
+          COMMIT_MESSAGE="${{ env.commit_message }}"
+
+          LABELS=""
+
+          for KEYWORD in "${!LABEL_KEYWORDS[@]}"; do
+            if echo "$COMMIT_TITLE" "$COMMIT_MESSAGE" | grep -qi "$KEYWORD"; then
+              LABELS="${LABELS},${LABEL_KEYWORDS[$KEYWORD]}"
+            fi
+          done
+
+          # Remove leading comma
+          LABELS="${LABELS#,}"
+          echo "LABELS=${LABELS}" >> $GITHUB_ENV
+
+      - name: Create pull request
+        id: create_pr
+        run: |
+          gh pr create --head develop --base main -t "$commit_title" -b "$commit_message" -a "$GITHUB_USERNAME" -l "$LABELS"
